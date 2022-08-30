@@ -1,0 +1,44 @@
+name: Release
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+jobs:
+  ubuntu-dev:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Clone
+        uses: actions/checkout@v2
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v2
+      - name: Compile
+        run: |
+          echo "ACI_TIME=ACI-$(date +''%Y%m%d%H'')" >> $GITHUB_ENV
+          sudo apt-get install -y fuse libfuse2 freeglut3-dev libgstreamer-plugins-base1.0-0 libtbb-dev
+          git submodule update --init --recursive
+          mkdir build && cd build
+          cmake -DCMAKE_BUILD_TYPE=release ../
+          make -j"$(nproc)"
+          wget -q https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage
+          chmod +x linuxdeployqt-continuous-x86_64.AppImage
+          mkdir deploy
+          cp alcongrator deploy
+          cd deploy
+          ../linuxdeployqt-continuous-x86_64.AppImage alcongrator -bundle-non-qt-libs -unsupported-allow-new-glibc -no-translations
+          tar -czf alcongrator-linux.tar.gz *
+          cp alcongrator-linux.tar.gz ../../
+      - name: Upload
+        uses: actions/upload-artifact@v3
+        with:
+          name: alcongrator-linux.tar.gz
+          path: alcongrator-linux.tar.gz
+      - name: Release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: alcongrator-linux.tar.gz
+          asset_name: alcongrator-linux.tar.gz
+          tag: ${{ env.ACI_TIME }}
+          prerelease: true
+          overwrite: true
