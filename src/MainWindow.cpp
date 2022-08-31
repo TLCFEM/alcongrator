@@ -142,24 +142,23 @@ void MainWindow::on_step_size_valueChanged(const double step_size) {
 }
 
 void MainWindow::on_pa_valueChanged(double) {
-    update_data();
+    on_refresh_clicked();
 }
 
 void MainWindow::on_pb_valueChanged(double) {
-    // if(ui->scheme->currentText() == "Newmark") ui->pa->setRange(.25 * std::pow(ui->pb->value(), 2.), 1.);
-    update_data();
+    on_refresh_clicked();
 }
 
 void MainWindow::on_pc_valueChanged(double) {
-    update_data();
+    on_refresh_clicked();
 }
 
 void MainWindow::on_v_offset_valueChanged(double) {
-    update_data();
+    on_refresh_clicked();
 }
 
 void MainWindow::on_u_offset_valueChanged(double) {
-    update_data();
+    on_refresh_clicked();
 }
 
 void MainWindow::load_data(const QString& name) {
@@ -333,9 +332,9 @@ void MainWindow::update_data() {
 }
 
 void MainWindow::set_label() {
-    ui->pa->setRange(0,1);
-    ui->pb->setRange(0,1);
-    ui->pc->setRange(0,1);
+    ui->pa->setRange(0, 1);
+    ui->pb->setRange(0, 1);
+    ui->pc->setRange(0, 1);
 
     if(ui->scheme->currentText() == "Newmark") {
         ui->pa_label->setText("beta");

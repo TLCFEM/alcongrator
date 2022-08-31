@@ -97,7 +97,7 @@
              <x>0</x>
              <y>0</y>
              <width>376</width>
-             <height>361</height>
+             <height>371</height>
             </rect>
            </property>
            <attribute name="label">
@@ -185,7 +185,7 @@
              <x>0</x>
              <y>0</y>
              <width>376</width>
-             <height>361</height>
+             <height>371</height>
             </rect>
            </property>
            <attribute name="label">
@@ -382,7 +382,7 @@
              <x>0</x>
              <y>0</y>
              <width>376</width>
-             <height>361</height>
+             <height>371</height>
             </rect>
            </property>
            <attribute name="label">
@@ -545,7 +545,7 @@
               <item row="2" column="1">
                <widget class="QSpinBox" name="window_length">
                 <property name="minimum">
-                 <number>32</number>
+                 <number>4</number>
                 </property>
                 <property name="maximum">
                  <number>2147483647</number>
@@ -578,7 +578,7 @@
              <x>0</x>
              <y>0</y>
              <width>376</width>
-             <height>361</height>
+             <height>371</height>
             </rect>
            </property>
            <attribute name="label">
@@ -672,7 +672,7 @@
              <x>0</x>
              <y>0</y>
              <width>376</width>
-             <height>361</height>
+             <height>371</height>
             </rect>
            </property>
            <attribute name="label">
@@ -784,7 +784,7 @@
              <x>0</x>
              <y>0</y>
              <width>376</width>
-             <height>361</height>
+             <height>371</height>
             </rect>
            </property>
            <attribute name="label">
@@ -859,7 +859,7 @@
              <x>0</x>
              <y>0</y>
              <width>376</width>
-             <height>361</height>
+             <height>371</height>
             </rect>
            </property>
            <attribute name="label">
@@ -932,7 +932,7 @@
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="target_group"/>
   <buttongroup name="source_group"/>
+  <buttongroup name="target_group"/>
  </buttongroups>
 </ui>
