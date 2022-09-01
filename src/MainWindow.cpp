@@ -59,20 +59,23 @@ void MainWindow::on_scheme_currentTextChanged(const QString&) {
 }
 
 void MainWindow::on_acceleration_clicked(const bool checked) {
-    ui->v_offset->setEnabled(checked);
     ui->u_offset->setEnabled(checked);
+    ui->v_offset->setEnabled(checked);
+    ui->a_offset->setDisabled(checked);
     on_refresh_clicked();
 }
 
 void MainWindow::on_velocity_clicked(const bool checked) {
-    ui->v_offset->setDisabled(checked);
     ui->u_offset->setEnabled(checked);
+    ui->v_offset->setDisabled(checked);
+    ui->a_offset->setEnabled(checked);
     on_refresh_clicked();
 }
 
 void MainWindow::on_displacement_clicked(const bool checked) {
-    ui->v_offset->setDisabled(checked);
     ui->u_offset->setDisabled(checked);
+    ui->v_offset->setEnabled(checked);
+    ui->a_offset->setEnabled(checked);
     on_refresh_clicked();
 }
 
@@ -316,6 +319,7 @@ void MainWindow::update_data() {
         displacement.zeros(time.n_elem);
         velocity = apply_filter(velocity, h);
 
+        acceleration(0) = ui->a_offset->value();
         displacement(0) = ui->u_offset->value();
 
         integrator->update_from_velocity(displacement, velocity, acceleration);
@@ -324,6 +328,9 @@ void MainWindow::update_data() {
         acceleration.zeros(time.n_elem);
         velocity.zeros(time.n_elem);
         displacement = apply_filter(displacement, h);
+
+        acceleration(0) = ui->a_offset->value();
+        velocity(0) = ui->v_offset->value();
 
         integrator->update_from_displacement(displacement, velocity, acceleration);
     }
