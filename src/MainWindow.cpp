@@ -479,7 +479,7 @@ arma::mat MainWindow::perform_transform(const arma::vec& data, const bool full) 
 
     auto half_length = arma::uword(length) / 2;
 
-    if(full)
+    if(true)
         return arma::join_rows(fft_frequency.head(half_length), fft_magnitude.head(half_length));
 
     const auto cutoff = std::fabs(ui->high_bound->value());
@@ -615,6 +615,11 @@ void MainWindow::on_quantile_clicked() {
 
         return result;
     };
+
+    if(!ui->frequency->isChecked()) {
+        QMessageBox::information(this, tr("Quantile"), tr("Please toggle Frequency to compute."));
+        return;
+    }
 
     if(ui->freq_a->isChecked())
         compute_quantile(f_a);
