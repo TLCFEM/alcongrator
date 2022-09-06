@@ -27,6 +27,7 @@ private:
 
     arma::mat source_data;
     arma::vec time, acceleration, velocity, displacement;
+    arma::mat f_a, f_v, f_u;
 
     static void initialise_canvas(QCustomPlot*, const char*, const char*);
     void plot_time_curve(QCustomPlot*, const arma::mat&, const char*);
@@ -68,6 +69,7 @@ private slots:
     void on_light_clicked(bool);
     void on_save_clicked();
     void on_listen_clicked();
+    void on_quantile_clicked();
 };
 
 #endif // MAINWINDOW_H

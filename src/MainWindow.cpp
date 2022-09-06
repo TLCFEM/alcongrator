@@ -456,11 +456,11 @@ void MainWindow::on_frequency_clicked(const bool checked) {
             plot_time_curve(ui->target_canvas, arma::join_rows(time, displacement), "Target Displacement Amplitude");
     }
     else if(ui->freq_a->isChecked())
-        plot_frequency_curve(ui->target_canvas, perform_transform(acceleration), "Target Acceleration Amplitude");
+        plot_frequency_curve(ui->target_canvas, f_a = perform_transform(acceleration), "Target Acceleration Amplitude");
     else if(ui->freq_v->isChecked())
-        plot_frequency_curve(ui->target_canvas, perform_transform(velocity), "Target Velocity Amplitude");
+        plot_frequency_curve(ui->target_canvas, f_v = perform_transform(velocity), "Target Velocity Amplitude");
     else if(ui->freq_u->isChecked())
-        plot_frequency_curve(ui->target_canvas, perform_transform(displacement), "Target Displacement Amplitude");
+        plot_frequency_curve(ui->target_canvas, f_u = perform_transform(displacement), "Target Displacement Amplitude");
 
     replot();
 }
@@ -595,4 +595,37 @@ void MainWindow::on_listen_clicked() {
     });
 
     audio->start(input);
+}
+
+void MainWindow::on_quantile_clicked() {
+    arma::vec result;
+    arma::vec q{.8, .85, .9, .95, .999};
+
+    auto compute_quantile = [&](const arma::mat& input) {
+        if(input.empty()) return arma::vec{};
+
+        const arma::vec f_frequency = input.col(0);
+        arma::vec f_magnitude = arma::cumsum(arma::square(input.col(1)));
+        f_magnitude /= f_magnitude.back();
+
+        result.set_size(q.n_elem);
+
+        for(auto I = 0llu; I < q.n_elem; ++I)
+            result(I) = f_frequency(arma::find(f_magnitude > q(I), 1).eval()(0));
+
+        return result;
+    };
+
+    if(ui->freq_a->isChecked())
+        compute_quantile(f_a);
+    else if(ui->freq_v->isChecked())
+        compute_quantile(f_v);
+    else if(ui->freq_u->isChecked())
+        compute_quantile(f_u);
+
+    std::ostringstream output;
+
+    result.print(output, "Frequency @ 80% 85% 90% 95% 99.9%:");
+
+    QMessageBox::information(this, tr("Quantile"), QString(output.str().c_str()));
 }
