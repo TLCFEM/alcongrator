@@ -96,8 +96,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>336</width>
-             <height>412</height>
+             <width>376</width>
+             <height>361</height>
             </rect>
            </property>
            <attribute name="label">
@@ -184,8 +184,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>336</width>
-             <height>412</height>
+             <width>376</width>
+             <height>361</height>
             </rect>
            </property>
            <attribute name="label">
@@ -381,8 +381,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>336</width>
-             <height>412</height>
+             <width>376</width>
+             <height>361</height>
             </rect>
            </property>
            <attribute name="label">
@@ -565,7 +565,7 @@
             <item>
              <widget class="QPushButton" name="custom_coef">
               <property name="text">
-               <string>Set Custom Filter Coefficients (Design Yourself)</string>
+               <string>Set Custom Filter Coefficients</string>
               </property>
              </widget>
             </item>
@@ -589,8 +589,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>336</width>
-             <height>412</height>
+             <width>376</width>
+             <height>361</height>
             </rect>
            </property>
            <attribute name="label">
@@ -709,8 +709,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>336</width>
-             <height>412</height>
+             <width>376</width>
+             <height>361</height>
             </rect>
            </property>
            <attribute name="label">
@@ -828,8 +828,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>336</width>
-             <height>412</height>
+             <width>376</width>
+             <height>361</height>
             </rect>
            </property>
            <attribute name="label">
@@ -903,8 +903,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>336</width>
-             <height>412</height>
+             <width>376</width>
+             <height>361</height>
             </rect>
            </property>
            <attribute name="label">
@@ -977,7 +977,7 @@
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="source_group"/>
   <buttongroup name="target_group"/>
+  <buttongroup name="source_group"/>
  </buttongroups>
 </ui>
