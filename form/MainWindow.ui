@@ -96,8 +96,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>376</width>
-             <height>361</height>
+             <width>336</width>
+             <height>412</height>
             </rect>
            </property>
            <attribute name="label">
@@ -184,8 +184,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>376</width>
-             <height>361</height>
+             <width>336</width>
+             <height>412</height>
             </rect>
            </property>
            <attribute name="label">
@@ -381,8 +381,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>376</width>
-             <height>361</height>
+             <width>336</width>
+             <height>412</height>
             </rect>
            </property>
            <attribute name="label">
@@ -589,8 +589,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>376</width>
-             <height>361</height>
+             <width>336</width>
+             <height>412</height>
             </rect>
            </property>
            <attribute name="label">
@@ -709,8 +709,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>376</width>
-             <height>361</height>
+             <width>336</width>
+             <height>412</height>
             </rect>
            </property>
            <attribute name="label">
@@ -729,6 +729,13 @@
             </item>
             <item>
              <layout class="QHBoxLayout" name="time_or_freq">
+              <item>
+               <widget class="QCheckBox" name="logarithmic">
+                <property name="text">
+                 <string>Logarithmic</string>
+                </property>
+               </widget>
+              </item>
               <item>
                <widget class="QCheckBox" name="frequency">
                 <property name="sizePolicy">
@@ -828,8 +835,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>376</width>
-             <height>361</height>
+             <width>336</width>
+             <height>412</height>
             </rect>
            </property>
            <attribute name="label">
@@ -903,8 +910,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>376</width>
-             <height>361</height>
+             <width>336</width>
+             <height>412</height>
             </rect>
            </property>
            <attribute name="label">
@@ -977,7 +984,7 @@
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="target_group"/>
   <buttongroup name="source_group"/>
+  <buttongroup name="target_group"/>
  </buttongroups>
 </ui>

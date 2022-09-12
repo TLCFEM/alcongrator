@@ -450,6 +450,8 @@ void MainWindow::set_label() {
 void MainWindow::replot() {
     main_page->source_canvas->setBackground(background_color);
     main_page->target_canvas->setBackground(background_color);
+    main_page->source_canvas->rescaleAxes();
+    main_page->target_canvas->rescaleAxes();
     main_page->source_canvas->replot();
     main_page->target_canvas->replot();
 }
@@ -531,6 +533,8 @@ void MainWindow::initialise_canvas(QCustomPlot* canvas, const char* x_label, con
 
     canvas->xAxis->grid()->setSubGridVisible(true);
     canvas->yAxis->grid()->setSubGridVisible(true);
+
+    if(canvas == main_page->target_canvas) canvas->yAxis->setScaleType(main_page->logarithmic->isChecked() ? QCPAxis::stLogarithmic : QCPAxis::stLinear);
 }
 
 void MainWindow::plot_curve(QCustomPlot* canvas, const arma::vec& x_data, const arma::vec& y_data) {
@@ -656,4 +660,9 @@ void MainWindow::on_custom_coef_clicked() {
 
 void MainWindow::set_coefficient() {
     custom_filter = filter_page.get_coefficient();
+}
+
+void MainWindow::on_logarithmic_clicked(bool checked) {
+    main_page->target_canvas->yAxis->setScaleType(checked ? QCPAxis::stLogarithmic : QCPAxis::stLinear);
+    replot();
 }

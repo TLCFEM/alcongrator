@@ -33,7 +33,7 @@ private:
     arma::mat f_a, f_v, f_u;
     arma::vec custom_filter;
 
-    static void initialise_canvas(QCustomPlot*, const char*, const char*);
+    void initialise_canvas(QCustomPlot*, const char*, const char*);
     void plot_time_curve(QCustomPlot*, const arma::mat&, const char*);
     void plot_frequency_curve(QCustomPlot*, const arma::mat&, const char*);
     void plot_curve(QCustomPlot*, const arma::vec&, const arma::vec&);
@@ -77,6 +77,7 @@ private slots:
     void on_custom_coef_clicked();
 
     void set_coefficient();
+    void on_logarithmic_clicked(bool);
 };
 
 #endif // MAINWINDOW_H
