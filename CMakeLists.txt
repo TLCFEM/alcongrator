@@ -39,6 +39,7 @@ find_package(Qt5 COMPONENTS
 set(SOURCES
         include/QCustomPlot/qcustomplot.cpp
         src/alcongrator.cpp
+        src/CustomFilter.cpp
         src/CubicSpline.cpp
         src/IntegrationScheme.cpp
         src/MainWindow.cpp

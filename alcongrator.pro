@@ -24,6 +24,7 @@ INCLUDEPATH += include \
     src
 
 SOURCES += \
+    src/CustomFilter.cpp \
     include/QCustomPlot/qcustomplot.cpp \
     src/CubicSpline.cpp \
     src/IntegrationScheme.cpp \
@@ -32,6 +33,7 @@ SOURCES += \
     src/resampling.cpp
 
 HEADERS += \
+    src/CustomFilter.h \
     include/QCustomPlot/qcustomplot.h \
     src/CubicSpline.h \
     src/IntegrationScheme.h \
@@ -39,6 +41,7 @@ HEADERS += \
     src/resampling.h
 
 FORMS += \
+    form/CustomFilter.ui \
     form/MainWindow.ui
 
 # Default rules for deployment.

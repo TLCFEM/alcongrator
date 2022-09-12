@@ -17,7 +17,7 @@ int main(int argc, char* argv[]) {
     MainWindow win;
 
     win.setWindowTitle(title);
-    win.show();
+    win.showMaximized();
 
     return QApplication::exec();
 }
