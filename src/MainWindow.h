@@ -24,6 +24,9 @@ private:
 
     CustomFilter filter_page;
 
+    QSharedPointer<QCPAxisTickerLog> log_ticker{new QCPAxisTickerLog};
+    QSharedPointer<QCPAxisTickerFixed> linear_ticker{new QCPAxisTickerFixed};
+
     QColor background_color = Qt::white;
     QColor source_color = QColor(202, 0, 32);
     QColor target_color = QColor(5, 113, 176);

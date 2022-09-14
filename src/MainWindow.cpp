@@ -490,7 +490,7 @@ void MainWindow::on_frequency_clicked(const bool checked) {
 }
 
 arma::mat MainWindow::perform_transform(const arma::vec& data) {
-    const auto length = 2 << nextpow2(time.n_elem);
+    const auto length = std::max(2048, 2 << nextpow2(time.n_elem));
     const arma::vec time_diff = arma::diff(time);
     if(time_diff.empty()) return {};
     const auto step_size = time_diff.min();
@@ -499,7 +499,7 @@ arma::mat MainWindow::perform_transform(const arma::vec& data) {
     const arma::vec fft_frequency = arma::regspace(0, 1, length - 1) / (step_size * double(length));
     arma::cx_vec fft_cx_magnitude = arma::fft(data, arma::uword(length));
     arma::vec fft_magnitude = 2. * arma::abs(fft_cx_magnitude) / double(data.n_elem);
-    fft_magnitude(0) /= 2.;
+    // fft_magnitude(0) /= 2.;
 
     auto half_length = arma::uword(length) / 2;
 
@@ -534,7 +534,16 @@ void MainWindow::initialise_canvas(QCustomPlot* canvas, const char* x_label, con
     canvas->xAxis->grid()->setSubGridVisible(true);
     canvas->yAxis->grid()->setSubGridVisible(true);
 
-    if(canvas == main_page->target_canvas) canvas->yAxis->setScaleType(main_page->logarithmic->isChecked() ? QCPAxis::stLogarithmic : QCPAxis::stLinear);
+    if(canvas != main_page->target_canvas) return;
+
+    if(main_page->logarithmic->isChecked()) {
+        main_page->target_canvas->yAxis->setTicker(log_ticker);
+        main_page->target_canvas->yAxis->setScaleType(QCPAxis::stLogarithmic);
+    }
+    else {
+        main_page->target_canvas->yAxis->setTicker(linear_ticker);
+        main_page->target_canvas->yAxis->setScaleType(QCPAxis::stLinear);
+    }
 }
 
 void MainWindow::plot_curve(QCustomPlot* canvas, const arma::vec& x_data, const arma::vec& y_data) {
@@ -663,6 +672,13 @@ void MainWindow::set_coefficient() {
 }
 
 void MainWindow::on_logarithmic_clicked(bool checked) {
-    main_page->target_canvas->yAxis->setScaleType(checked ? QCPAxis::stLogarithmic : QCPAxis::stLinear);
+    if(checked) {
+        main_page->target_canvas->yAxis->setTicker(log_ticker);
+        main_page->target_canvas->yAxis->setScaleType(QCPAxis::stLogarithmic);
+    }
+    else {
+        main_page->target_canvas->yAxis->setTicker(linear_ticker);
+        main_page->target_canvas->yAxis->setScaleType(QCPAxis::stLinear);
+    }
     replot();
 }
