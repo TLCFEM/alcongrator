@@ -479,6 +479,14 @@ void MainWindow::on_frequency_clicked(const bool checked) {
         else if(main_page->freq_u->isChecked())
             plot_time_curve(main_page->target_canvas, arma::join_rows(time, displacement), "Target Displacement Amplitude");
     }
+    else if(main_page->logarithmic->isChecked()) {
+        if(main_page->freq_a->isChecked())
+            plot_frequency_curve(main_page->target_canvas, f_a = perform_transform(acceleration), "Target Acceleration Amplitude (dB)");
+        else if(main_page->freq_v->isChecked())
+            plot_frequency_curve(main_page->target_canvas, f_v = perform_transform(velocity), "Target Velocity Amplitude (dB)");
+        else if(main_page->freq_u->isChecked())
+            plot_frequency_curve(main_page->target_canvas, f_u = perform_transform(displacement), "Target Displacement Amplitude (dB)");
+    }
     else if(main_page->freq_a->isChecked())
         plot_frequency_curve(main_page->target_canvas, f_a = perform_transform(acceleration), "Target Acceleration Amplitude");
     else if(main_page->freq_v->isChecked())
@@ -499,9 +507,8 @@ arma::mat MainWindow::perform_transform(const arma::vec& data) {
     const arma::vec fft_frequency = arma::regspace(0, 1, length - 1) / (step_size * double(length));
     arma::cx_vec fft_cx_magnitude = arma::fft(data, arma::uword(length));
     arma::vec fft_magnitude = 2. * arma::abs(fft_cx_magnitude) / double(data.n_elem);
-    // fft_magnitude(0) /= 2.;
 
-    auto half_length = arma::uword(length) / 2;
+    const auto half_length = arma::uword(length) / 2;
 
     return arma::join_rows(fft_frequency.head(half_length), fft_magnitude.head(half_length));
 }
@@ -519,7 +526,10 @@ void MainWindow::plot_frequency_curve(QCustomPlot* canvas, const arma::mat& data
 
     initialise_canvas(canvas, "Frequency", y_label);
 
-    plot_curve(canvas, data.col(0), data.col(1));
+    if(main_page->logarithmic->isChecked())
+        plot_curve(canvas, data.col(0), 20. * arma::log10(data.col(1)));
+    else
+        plot_curve(canvas, data.col(0), data.col(1));
 }
 
 void MainWindow::initialise_canvas(QCustomPlot* canvas, const char* x_label, const char* y_label) {
@@ -533,17 +543,6 @@ void MainWindow::initialise_canvas(QCustomPlot* canvas, const char* x_label, con
 
     canvas->xAxis->grid()->setSubGridVisible(true);
     canvas->yAxis->grid()->setSubGridVisible(true);
-
-    if(canvas != main_page->target_canvas) return;
-
-    if(main_page->logarithmic->isChecked()) {
-        main_page->target_canvas->yAxis->setTicker(log_ticker);
-        main_page->target_canvas->yAxis->setScaleType(QCPAxis::stLogarithmic);
-    }
-    else {
-        main_page->target_canvas->yAxis->setTicker(linear_ticker);
-        main_page->target_canvas->yAxis->setScaleType(QCPAxis::stLinear);
-    }
 }
 
 void MainWindow::plot_curve(QCustomPlot* canvas, const arma::vec& x_data, const arma::vec& y_data) {
@@ -671,14 +670,6 @@ void MainWindow::set_coefficient() {
     custom_filter = filter_page.get_coefficient();
 }
 
-void MainWindow::on_logarithmic_clicked(bool checked) {
-    if(checked) {
-        main_page->target_canvas->yAxis->setTicker(log_ticker);
-        main_page->target_canvas->yAxis->setScaleType(QCPAxis::stLogarithmic);
-    }
-    else {
-        main_page->target_canvas->yAxis->setTicker(linear_ticker);
-        main_page->target_canvas->yAxis->setScaleType(QCPAxis::stLinear);
-    }
-    replot();
+void MainWindow::on_logarithmic_clicked(bool) {
+    on_refresh_clicked();
 }
