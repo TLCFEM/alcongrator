@@ -479,14 +479,6 @@ void MainWindow::on_frequency_clicked(const bool checked) {
         else if(main_page->freq_u->isChecked())
             plot_time_curve(main_page->target_canvas, arma::join_rows(time, displacement), "Target Displacement Amplitude");
     }
-    else if(main_page->logarithmic->isChecked()) {
-        if(main_page->freq_a->isChecked())
-            plot_frequency_curve(main_page->target_canvas, f_a = perform_transform(acceleration), "Target Acceleration Amplitude (dB)");
-        else if(main_page->freq_v->isChecked())
-            plot_frequency_curve(main_page->target_canvas, f_v = perform_transform(velocity), "Target Velocity Amplitude (dB)");
-        else if(main_page->freq_u->isChecked())
-            plot_frequency_curve(main_page->target_canvas, f_u = perform_transform(displacement), "Target Displacement Amplitude (dB)");
-    }
     else if(main_page->freq_a->isChecked())
         plot_frequency_curve(main_page->target_canvas, f_a = perform_transform(acceleration), "Target Acceleration Amplitude");
     else if(main_page->freq_v->isChecked())
@@ -526,10 +518,7 @@ void MainWindow::plot_frequency_curve(QCustomPlot* canvas, const arma::mat& data
 
     initialise_canvas(canvas, "Frequency", y_label);
 
-    if(main_page->logarithmic->isChecked())
-        plot_curve(canvas, data.col(0), 20. * arma::log10(data.col(1)));
-    else
-        plot_curve(canvas, data.col(0), data.col(1));
+    plot_curve(canvas, data.col(0), data.col(1));
 }
 
 void MainWindow::initialise_canvas(QCustomPlot* canvas, const char* x_label, const char* y_label) {
@@ -551,8 +540,6 @@ void MainWindow::plot_curve(QCustomPlot* canvas, const arma::vec& x_data, const 
     const auto y_min = y_data.min();
 
     canvas->clearGraphs();
-    canvas->xAxis->setRange(0., 1.05 * x_max);
-    canvas->yAxis->setRange(1.1 * y_min, 1.1 * y_max);
 
     QPen pen;
     pen.setWidth(x_data.size() > 1000 ? 1 : 2);
@@ -561,6 +548,20 @@ void MainWindow::plot_curve(QCustomPlot* canvas, const arma::vec& x_data, const 
     canvas->addGraph();
     canvas->graph()->setPen(pen);
     canvas->graph()->setData(to_vector(x_data), to_vector(y_data));
+
+    canvas->xAxis->setRange(0., 1.05 * x_max);
+    const auto diff_y = y_max - y_min;
+    if(canvas != main_page->target_canvas)
+        canvas->yAxis->setRange(y_min - .05 * diff_y, y_max + .05 * diff_y);
+    else if(main_page->logarithmic->isChecked()) {
+        canvas->yAxis->setScaleType(QCPAxis::stLogarithmic);
+        canvas->yAxis->setRange(.1 * y_min, 10. * y_max);
+    }
+    else {
+        canvas->yAxis->setScaleType(QCPAxis::stLinear);
+        canvas->yAxis->setRange(y_min - .05 * diff_y, y_max + .05 * diff_y);
+    }
+
     canvas->replot();
 }
 
