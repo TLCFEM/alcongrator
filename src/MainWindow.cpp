@@ -319,7 +319,7 @@ void MainWindow::update_data() {
         }
         else if(main_page->filter->currentText() == "Custom") {
             if(custom_filter.empty()) {
-                QMessageBox::information(this, tr("Need coefficients"), tr("Please set filter coefiicients first."));
+                QMessageBox::information(this, tr("Need coefficients"), tr("Please set filter coefficients first."));
                 return;
             }
             h = custom_filter;
@@ -450,8 +450,6 @@ void MainWindow::set_label() {
 void MainWindow::replot() {
     main_page->source_canvas->setBackground(background_color);
     main_page->target_canvas->setBackground(background_color);
-    main_page->source_canvas->rescaleAxes();
-    main_page->target_canvas->rescaleAxes();
     main_page->source_canvas->replot();
     main_page->target_canvas->replot();
 }
@@ -490,7 +488,7 @@ void MainWindow::on_frequency_clicked(const bool checked) {
 }
 
 arma::mat MainWindow::perform_transform(const arma::vec& data) {
-    const auto length = std::max(2048, 2 << nextpow2(time.n_elem));
+    const auto length = std::max(1024, 2 << nextpow2(time.n_elem));
     const arma::vec time_diff = arma::diff(time);
     if(time_diff.empty()) return {};
     const auto step_size = time_diff.min();
@@ -535,6 +533,7 @@ void MainWindow::initialise_canvas(QCustomPlot* canvas, const char* x_label, con
 }
 
 void MainWindow::plot_curve(QCustomPlot* canvas, const arma::vec& x_data, const arma::vec& y_data) {
+    const auto x_min = x_data.min();
     const auto x_max = x_data.max();
     const auto y_max = y_data.max();
     const auto y_min = y_data.min();
@@ -546,20 +545,36 @@ void MainWindow::plot_curve(QCustomPlot* canvas, const arma::vec& x_data, const 
     pen.setColor(canvas == main_page->source_canvas ? source_color : target_color);
 
     canvas->addGraph();
+    if(canvas == main_page->source_canvas) {
+        if(x_data.size() <= 1000) canvas->graph()->setLineStyle(QCPGraph::lsImpulse);
+        canvas->graph()->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssCircle, 3));
+    }
     canvas->graph()->setPen(pen);
     canvas->graph()->setData(to_vector(x_data), to_vector(y_data));
+    canvas->graph()->rescaleAxes(true);
 
-    canvas->xAxis->setRange(0., 1.05 * x_max);
-    const auto diff_y = y_max - y_min;
-    if(canvas != main_page->target_canvas)
-        canvas->yAxis->setRange(y_min - .05 * diff_y, y_max + .05 * diff_y);
-    else if(main_page->logarithmic->isChecked()) {
+    canvas->xAxis->setRange(x_min, x_max);
+    canvas->xAxis->scaleRange(1.02, canvas->xAxis->range().center());
+    if(main_page->logarithmic->isChecked() && canvas == main_page->target_canvas) {
         canvas->yAxis->setScaleType(QCPAxis::stLogarithmic);
-        canvas->yAxis->setRange(.1 * y_min, 10. * y_max);
+        QSharedPointer<QCPAxisTickerLog> log_ticker(new QCPAxisTickerLog);
+        log_ticker->setTickCount(10);
+        canvas->yAxis->setTicker(log_ticker);
+        canvas->yAxis->setNumberFormat("eb");
+        canvas->yAxis->setNumberPrecision(0);
+        canvas->yAxis->setRange(std::pow(10., std::floor(std::log10(y_min))), std::pow(10., std::ceil(std::log10(y_max))));
     }
     else {
         canvas->yAxis->setScaleType(QCPAxis::stLinear);
-        canvas->yAxis->setRange(y_min - .05 * diff_y, y_max + .05 * diff_y);
+        QSharedPointer<QCPAxisTickerFixed> linear_ticker(new QCPAxisTickerFixed);
+        linear_ticker->setTickStep(std::ceil((y_max - y_min) * 2.) * .05);
+        canvas->yAxis->setTicker(linear_ticker);
+        canvas->yAxis->setTicks(true);
+        canvas->yAxis->setTickLabels(true);
+        canvas->yAxis->setNumberFormat("gb");
+        canvas->yAxis->setNumberPrecision(2);
+        canvas->yAxis->setRange(y_min, y_max);
+        canvas->yAxis->scaleRange(1.05, canvas->yAxis->range().center());
     }
 
     canvas->replot();
@@ -644,7 +659,7 @@ void MainWindow::on_quantile_clicked() {
     };
 
     if(!main_page->frequency->isChecked()) {
-        QMessageBox::information(this, tr("Quantile"), tr("Please toggle Frequency to compute."));
+        QMessageBox::information(this, tr("Quantile"), tr("Please toggle >Frequency< to compute."));
         return;
     }
 
