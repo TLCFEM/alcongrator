@@ -10,11 +10,13 @@ jobs:
     steps:
       - name: Clone
         uses: actions/checkout@v2
+#      - name: install_qt_deps
+#        run: sudo apt-get install libgstreamer-gl1.0-0
       - name: Install Qt
-        uses: jurplel/install-qt-action@v2
+        uses: jurplel/install-qt-action@v3
         with:
           version: 6.4.1
-          modules: qtmultimedia
+          modules: 'addons.qtmultimedia'
       - name: Compile
         run: |
           echo "ACI_TIME=ACI-$(date +''%Y%m%d%H'')" >> $GITHUB_ENV
