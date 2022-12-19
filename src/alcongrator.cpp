@@ -4,8 +4,6 @@
 #include "MainWindow.h"
 
 int main(int argc, char* argv[]) {
-    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-
     const QString title = "Alcongrator";
 
     QApplication app(argc, argv);

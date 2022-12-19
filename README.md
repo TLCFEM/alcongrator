@@ -23,7 +23,7 @@ Currently, it supports:
 
 ### Prerequisites
 
-Please install [Qt 5.12 LTS](https://doc.qt.io/qt-5.12/index.html). [OpenBLAS](https://github.com/xianyi/OpenBLAS) is
+Please install [Qt 6](https://doc.qt.io/qt-6). [OpenBLAS](https://github.com/xianyi/OpenBLAS) is
 used as the linear algebra driver. The bundled build (under `lib/`) may not be optimal on your machine, replace it with
 your version if necessary.
 
@@ -33,9 +33,7 @@ Nothing needs to be noted.
 
 #### Windows
 
-[Qt 5.12 LTS](https://doc.qt.io/qt-5.12/index.html) works with `GCC 8.1.0`. If it is not installed, you can either use
-the distribution by [WinLibs](https://winlibs.com/) (recommended)
-or [MinGW-w64](https://sourceforge.net/projects/mingw-w64/files/).
+Install [Qt 6](https://doc.qt.io/qt-6). Configure with CMake.
 
 Alternatively, download and install [Visual Studio 2019](https://visualstudio.microsoft.com/vs/older-downloads/) if you
 wish to use MSVC platform.
@@ -44,7 +42,7 @@ wish to use MSVC platform.
 
 The dark theme is taken from [TeXstudio](https://github.com/texstudio-org/texstudio) project.
 
-1. [Qt](https://doc.qt.io/qt-5.12/index.html)
+1. [Qt](https://doc.qt.io/qt-6/index.html)
 2. [Armadillo](http://arma.sourceforge.net/docs.html)
 3. [OpenBLAS](https://github.com/xianyi/OpenBLAS)
 4. [QCustomPlot](https://www.qcustomplot.com/)

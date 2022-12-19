@@ -1,6 +1,4 @@
-QT += core gui multimedia
-
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
+QT += core gui multimedia opengl widgets printsupport
 
 CONFIG += c++17
 

@@ -12,6 +12,7 @@ jobs:
         uses: actions/checkout@v2
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
+        version: 6.4.1
       - name: Compile
         run: |
           echo "ACI_TIME=ACI-$(date +''%Y%m%d%H'')" >> $GITHUB_ENV

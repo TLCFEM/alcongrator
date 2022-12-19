@@ -4,9 +4,9 @@
 
 #include <CubicSpline.h>
 #include <IntegrationScheme.h>
-#include <QAudioDeviceInfo>
 #include <QAudioFormat>
 #include <QAudioOutput>
+#include <QMediaPlayer>
 
 QVector<double> to_vector(const arma::vec& in) {
     QVector<double> out(int(in.n_elem), 0.);
@@ -600,16 +600,10 @@ void MainWindow::on_light_clicked(const bool checked) {
 void MainWindow::on_listen_clicked() {
     if(time.empty()) return;
 
-    QAudioFormat audioFormat;
-    audioFormat.setSampleRate(static_cast<int>(main_page->upsample_ratio->value() / main_page->step_size->value()));
-    audioFormat.setChannelCount(1);
-    audioFormat.setSampleSize(32);
-    audioFormat.setCodec("audio/pcm");
-    audioFormat.setByteOrder(QAudioFormat::LittleEndian);
-    audioFormat.setSampleType(QAudioFormat::Float);
-
-    QAudioDeviceInfo deviceInfo(QAudioDeviceInfo::defaultOutputDevice());
-    if(!deviceInfo.isFormatSupported(audioFormat)) return;
+    QAudioFormat audio_format;
+    audio_format.setSampleRate(static_cast<int>(main_page->upsample_ratio->value() / main_page->step_size->value()));
+    audio_format.setChannelCount(1);
+    audio_format.setSampleFormat(QAudioFormat::Float);
 
     arma::fvec f_data;
     if(main_page->freq_a->isChecked())
@@ -621,22 +615,13 @@ void MainWindow::on_listen_clicked() {
 
     f_data /= std::max(std::fabs(f_data.min()), std::fabs(f_data.max()));
 
-    auto* byteBuffer = new QByteArray((char*)f_data.memptr(), sizeof(float) * acceleration.n_elem);
+    QByteArray byte_buffer((char*)f_data.memptr(), sizeof(float) * acceleration.n_elem);
 
-    auto* input = new QBuffer(byteBuffer);
-    input->open(QIODevice::ReadOnly);
-
-    auto* audio = new QAudioOutput(audioFormat, this);
-
-    connect(audio, &QAudioOutput::stateChanged, [audio, input, byteBuffer](QAudio::State newState) {
-        if(newState != QAudio::IdleState) return;
-
-        delete audio;
-        delete input;
-        delete byteBuffer;
-    });
-
-    audio->start(input);
+    QMediaPlayer player;
+    QAudioOutput audio_output;
+    player.setAudioOutput(&audio_output);
+    player.setSource(QUrl::fromEncoded(byte_buffer));
+    player.play();
 }
 
 void MainWindow::on_quantile_clicked() {
