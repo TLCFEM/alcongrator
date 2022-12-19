@@ -14,6 +14,7 @@ jobs:
         uses: jurplel/install-qt-action@v2
         with:
           version: 6.4.1
+          modules: qtmultimedia
       - name: Compile
         run: |
           echo "ACI_TIME=ACI-$(date +''%Y%m%d%H'')" >> $GITHUB_ENV
