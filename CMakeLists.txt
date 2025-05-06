@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.22)
 
 project(alcongrator)
 
-set(QT_PATH "$ENV{HOME}/Qt5.12.12/5.12.12/gcc_64/lib/cmake" CACHE STRING "Path to Qt")
+set(QT_PATH "$ENV{HOME}/Qt/6.4.1/gcc_64/lib/cmake" CACHE STRING "Path to Qt")
 set(CMAKE_PREFIX_PATH "${QT_PATH}")
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
@@ -28,7 +28,7 @@ endif ()
 include_directories(include)
 include_directories(include/QCustomPlot)
 
-find_package(Qt5 COMPONENTS
+find_package(Qt6 COMPONENTS
         Core
         Gui
         Widgets
@@ -39,6 +39,7 @@ find_package(Qt5 COMPONENTS
 set(SOURCES
         include/QCustomPlot/qcustomplot.cpp
         src/alcongrator.cpp
+        src/CustomFilter.cpp
         src/CubicSpline.cpp
         src/IntegrationScheme.cpp
         src/MainWindow.cpp
@@ -62,11 +63,11 @@ add_executable(${PROJECT_NAME} ${UIS} ${SOURCES} ${RESOURCES})
 add_dependencies(${PROJECT_NAME} superlu)
 
 target_link_libraries(${PROJECT_NAME}
-        Qt5::Core
-        Qt5::Gui
-        Qt5::Widgets
-        Qt5::PrintSupport
-        Qt5::Multimedia
+        Qt6::Core
+        Qt6::Gui
+        Qt6::Widgets
+        Qt6::PrintSupport
+        Qt6::Multimedia
         superlu
         openblas
         )

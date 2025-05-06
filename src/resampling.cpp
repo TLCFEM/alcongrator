@@ -179,27 +179,5 @@ template<> vec fir_band_stop<WindowType::FlatTop>(const uword s, const double fa
 arma::vec apply_filter(const arma::vec& in, const arma::vec& coef) {
     if(coef.empty()) return in;
 
-    arma::vec out(in.n_elem, arma::fill::none);
-
-    const auto buffer_size = coef.n_elem;
-
-    arma::vec buffer(buffer_size, arma::fill::zeros);
-    auto index = 0llu;
-
-    auto feed = [&](const double next) {
-        buffer(index) = next;
-
-        arma::uword p = 0;
-        double result = 0.;
-        for(auto m = index; m < buffer_size; ++m) result += coef(p++) * buffer(m);
-        for(auto m = 0llu; m < index; ++m) result += coef(p++) * buffer(m);
-
-        index = (index == 0 ? buffer_size : index) - 1;
-
-        return result;
-    };
-
-    for(auto n = 0llu; n < out.n_elem; ++n) out(n) = feed(in(n));
-
-    return out;
+    return arma::conv(in, coef, "same");
 }

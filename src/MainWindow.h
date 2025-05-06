@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <CustomFilter.h>
 #include <QMainWindow>
 #include <armadillo>
 #include <qcustomplot.h>
@@ -19,7 +20,9 @@ public:
     ~MainWindow() override;
 
 private:
-    Ui::MainWindow* ui;
+    Ui::MainWindow* main_page;
+
+    CustomFilter filter_page;
 
     QColor background_color = Qt::white;
     QColor source_color = QColor(202, 0, 32);
@@ -27,12 +30,14 @@ private:
 
     arma::mat source_data;
     arma::vec time, acceleration, velocity, displacement;
+    arma::mat f_a, f_v, f_u;
+    arma::vec custom_filter;
 
-    static void initialise_canvas(QCustomPlot*, const char*, const char*);
+    void initialise_canvas(QCustomPlot*, const char*, const char*);
     void plot_time_curve(QCustomPlot*, const arma::mat&, const char*);
     void plot_frequency_curve(QCustomPlot*, const arma::mat&, const char*);
     void plot_curve(QCustomPlot*, const arma::vec&, const arma::vec&);
-    arma::mat perform_transform(const arma::vec&, const bool full = false);
+    arma::mat perform_transform(const arma::vec&);
     void update_data();
     void set_label();
     void replot();
@@ -68,6 +73,11 @@ private slots:
     void on_light_clicked(bool);
     void on_save_clicked();
     void on_listen_clicked();
+    void on_quantile_clicked();
+    void on_custom_coef_clicked();
+
+    void set_coefficient();
+    void on_logarithmic_clicked(bool);
 };
 
 #endif // MAINWINDOW_H

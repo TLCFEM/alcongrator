@@ -1,9 +1,11 @@
 name: Release
 on:
   push:
-    branches: [ dev ]
+    branches: [ master ]
   pull_request:
-    branches: [ dev ]
+    branches: [ master ]
+env:
+  ACI_TIME: ""
 jobs:
   ubuntu-dev:
     runs-on: ubuntu-24.04
@@ -35,3 +37,12 @@ jobs:
         with:
           name: alcongrator-linux.tar.gz
           path: alcongrator-linux.tar.gz
+      - name: Release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: alcongrator-linux.tar.gz
+          asset_name: alcongrator-linux.tar.gz
+          tag: ${{ env.ACI_TIME }}
+          prerelease: true
+          overwrite: true

@@ -72,13 +72,13 @@
       <widget class="QGroupBox" name="setting">
        <property name="minimumSize">
         <size>
-         <width>360</width>
+         <width>380</width>
          <height>680</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>400</width>
+         <width>420</width>
          <height>16777215</height>
         </size>
        </property>
@@ -96,8 +96,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>376</width>
-             <height>361</height>
+             <width>396</width>
+             <height>371</height>
             </rect>
            </property>
            <attribute name="label">
@@ -184,8 +184,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>376</width>
-             <height>361</height>
+             <width>396</width>
+             <height>371</height>
             </rect>
            </property>
            <attribute name="label">
@@ -381,8 +381,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>376</width>
-             <height>361</height>
+             <width>396</width>
+             <height>371</height>
             </rect>
            </property>
            <attribute name="label">
@@ -417,7 +417,7 @@
                  <bool>false</bool>
                 </property>
                 <property name="currentIndex">
-                 <number>2</number>
+                 <number>0</number>
                 </property>
                 <item>
                  <property name="text">
@@ -437,6 +437,11 @@
                 <item>
                  <property name="text">
                   <string>Band Stop</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Custom</string>
                  </property>
                 </item>
                </widget>
@@ -545,7 +550,7 @@
               <item row="2" column="1">
                <widget class="QSpinBox" name="window_length">
                 <property name="minimum">
-                 <number>32</number>
+                 <number>4</number>
                 </property>
                 <property name="maximum">
                  <number>2147483647</number>
@@ -556,6 +561,13 @@
                </widget>
               </item>
              </layout>
+            </item>
+            <item>
+             <widget class="QPushButton" name="custom_coef">
+              <property name="text">
+               <string>Set Custom Filter Coefficients</string>
+              </property>
+             </widget>
             </item>
             <item>
              <spacer name="verticalSpacer_3">
@@ -577,8 +589,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>376</width>
-             <height>361</height>
+             <width>396</width>
+             <height>371</height>
             </rect>
            </property>
            <attribute name="label">
@@ -623,6 +635,25 @@
                 </property>
                </widget>
               </item>
+              <item row="1" column="1">
+               <widget class="QDoubleSpinBox" name="v_offset">
+                <property name="decimals">
+                 <number>10</number>
+                </property>
+                <property name="minimum">
+                 <double>-100.000000000000000</double>
+                </property>
+                <property name="maximum">
+                 <double>100.000000000000000</double>
+                </property>
+                <property name="singleStep">
+                 <double>0.000100000000000</double>
+                </property>
+                <property name="stepType">
+                 <enum>QAbstractSpinBox::AdaptiveDecimalStepType</enum>
+                </property>
+               </widget>
+              </item>
               <item row="1" column="0">
                <widget class="QLabel" name="v_offset_label">
                 <property name="text">
@@ -630,8 +661,15 @@
                 </property>
                </widget>
               </item>
-              <item row="1" column="1">
-               <widget class="QDoubleSpinBox" name="v_offset">
+              <item row="2" column="0">
+               <widget class="QLabel" name="a_offset_label">
+                <property name="text">
+                 <string>Initial A Offset</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="1">
+               <widget class="QDoubleSpinBox" name="a_offset">
                 <property name="decimals">
                  <number>10</number>
                 </property>
@@ -671,8 +709,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>376</width>
-             <height>361</height>
+             <width>396</width>
+             <height>371</height>
             </rect>
            </property>
            <attribute name="label">
@@ -691,6 +729,13 @@
             </item>
             <item>
              <layout class="QHBoxLayout" name="time_or_freq">
+              <item>
+               <widget class="QCheckBox" name="logarithmic">
+                <property name="text">
+                 <string>Logarithmic</string>
+                </property>
+               </widget>
+              </item>
               <item>
                <widget class="QCheckBox" name="frequency">
                 <property name="sizePolicy">
@@ -764,6 +809,13 @@
              </widget>
             </item>
             <item>
+             <widget class="QPushButton" name="quantile">
+              <property name="text">
+               <string>Energy Quantile</string>
+              </property>
+             </widget>
+            </item>
+            <item>
              <spacer name="verticalSpacer_5">
               <property name="orientation">
                <enum>Qt::Vertical</enum>
@@ -783,8 +835,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>376</width>
-             <height>361</height>
+             <width>396</width>
+             <height>371</height>
             </rect>
            </property>
            <attribute name="label">
@@ -858,8 +910,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>376</width>
-             <height>361</height>
+             <width>396</width>
+             <height>371</height>
             </rect>
            </property>
            <attribute name="label">
@@ -932,7 +984,7 @@
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="target_group"/>
   <buttongroup name="source_group"/>
+  <buttongroup name="target_group"/>
  </buttongroups>
 </ui>
