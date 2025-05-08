@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.22)
 
 project(alcongrator)
 
-set(QT_PATH "$ENV{HOME}/Qt/6.4.1/gcc_64/lib/cmake" CACHE STRING "Path to Qt")
+set(QT_PATH "$ENV{HOME}/Qt/6.9.0/gcc_64/lib/cmake" CACHE STRING "Path to Qt")
 set(CMAKE_PREFIX_PATH "${QT_PATH}")
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
@@ -28,13 +28,13 @@ endif ()
 include_directories(include)
 include_directories(include/QCustomPlot)
 
-find_package(Qt6 COMPONENTS
+find_package(Qt6 REQUIRED COMPONENTS
         Core
         Gui
         Widgets
         PrintSupport
         Multimedia
-        REQUIRED)
+)
 
 set(SOURCES
         include/QCustomPlot/qcustomplot.cpp
@@ -44,15 +44,15 @@ set(SOURCES
         src/IntegrationScheme.cpp
         src/MainWindow.cpp
         src/resampling.cpp
-        )
+)
 
 set(UIS
         form/MainWindow.ui
-        )
+)
 
 set(RESOURCES
         res/res.qrc
-        )
+)
 
 include_directories(src)
 
@@ -70,10 +70,10 @@ target_link_libraries(${PROJECT_NAME}
         Qt6::Multimedia
         superlu
         openblas
-        )
+)
 
 if (WIN32)
     target_link_libraries(${PROJECT_NAME} opengl32)
 elseif (UNIX)
-    target_link_libraries(${PROJECT_NAME} GL glut gfortran quadmath gomp)
+    target_link_libraries(${PROJECT_NAME} GL gfortran quadmath gomp)
 endif ()

@@ -1,9 +1,9 @@
 name: Release
 on:
   push:
-    branches: [ dev ]
   pull_request:
-    branches: [ dev ]
+env:
+  ACI_TIME: ""
 jobs:
   ubuntu-dev:
     runs-on: ubuntu-22.04
@@ -13,12 +13,12 @@ jobs:
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
         with:
-          version: 6.4.1
+          version: 6.9.0
           modules: 'addons.qtmultimedia'
       - name: Compile
         run: |
           echo "ACI_TIME=ACI-$(date +''%Y%m%d%H'')" >> $GITHUB_ENV
-          sudo apt-get install -y libfuse2 freeglut3-dev libgstreamer-plugins-base1.0-0 libtbb-dev
+          sudo apt-get install -y libfuse2 libglvnd-dev libgstreamer-plugins-base1.0-0 libtbb-dev
           mkdir build && cd build
           cmake -DCMAKE_BUILD_TYPE=release ../
           make -j"$(nproc)"
@@ -28,10 +28,20 @@ jobs:
           cp alcongrator deploy
           cd deploy
           ../linuxdeployqt-continuous-x86_64.AppImage alcongrator -bundle-non-qt-libs -unsupported-allow-new-glibc -no-translations
-          tar -czf alcongrator-linux.tar.gz *
+          tar czf alcongrator-linux.tar.gz *
           cp alcongrator-linux.tar.gz ../../
       - name: Upload
         uses: actions/upload-artifact@v4
         with:
           name: alcongrator-linux.tar.gz
           path: alcongrator-linux.tar.gz
+      - name: Release
+        if: github.ref == 'refs/heads/master'
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: alcongrator-linux.tar.gz
+          asset_name: alcongrator-linux.tar.gz
+          tag: ${{ env.ACI_TIME }}
+          prerelease: true
+          overwrite: true
