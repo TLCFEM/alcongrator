@@ -31,7 +31,7 @@ jobs:
           tar czf alcongrator-linux.tar.gz *
           cp alcongrator-linux.tar.gz ../../
       - name: Upload
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: alcongrator-linux.tar.gz
           path: alcongrator-linux.tar.gz
