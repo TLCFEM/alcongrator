@@ -17,7 +17,7 @@ jobs:
           modules: 'addons.qtmultimedia'
       - name: Compile
         run: |
-          echo "ACI_TIME=ACI-$(date +''%Y%m%d%H'')" >> $GITHUB_ENV
+          echo "ACI_TIME=ACI-$(date +''%Y%m%d'')" >> $GITHUB_ENV
           sudo apt-get install -y libfuse2 libglvnd-dev libgstreamer-plugins-base1.0-0 libtbb-dev
           mkdir build && cd build
           cmake -DCMAKE_BUILD_TYPE=release ../
@@ -36,7 +36,6 @@ jobs:
           name: alcongrator-linux.tar.gz
           path: alcongrator-linux.tar.gz
       - name: Release
-        if: contains(github.event.head_commit.message, '[publish]')
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
