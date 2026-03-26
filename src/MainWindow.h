@@ -33,16 +33,16 @@ private:
     arma::mat f_a, f_v, f_u;
     arma::vec custom_filter;
 
-    void initialise_canvas(QCustomPlot*, const char*, const char*);
-    void plot_time_curve(QCustomPlot*, const arma::mat&, const char*);
-    void plot_frequency_curve(QCustomPlot*, const arma::mat&, const char*);
-    void plot_curve(QCustomPlot*, const arma::vec&, const arma::vec&);
-    arma::mat perform_transform(const arma::vec&);
+    static void initialise_canvas(QCustomPlot*, const char*, const char*);
+    void plot_time_curve(QCustomPlot*, const arma::mat&, const char*) const;
+    void plot_frequency_curve(QCustomPlot*, const arma::mat&, const char*) const;
+    void plot_curve(QCustomPlot*, const arma::vec&, const arma::vec&) const;
+    arma::mat perform_transform(const arma::vec&) const;
     void update_data();
-    void set_label();
-    void replot();
+    void set_label() const;
+    void replot() const;
     void load_data(const QString&);
-    void save_data(const QString&);
+    void save_data(const QString&) const;
     void interpolate(arma::vec&);
 
 private slots:
@@ -72,7 +72,7 @@ private slots:
     void on_frequency_clicked(bool);
     void on_light_clicked(bool);
     void on_save_clicked();
-    void on_listen_clicked();
+    void on_listen_clicked() const;
     void on_quantile_clicked();
     void on_custom_coef_clicked();
 

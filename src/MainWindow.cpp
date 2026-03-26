@@ -9,12 +9,12 @@
 #include <QMediaPlayer>
 
 QVector<double> to_vector(const arma::vec& in) {
-    QVector<double> out(int(in.n_elem), 0.);
-    for(auto I = 0; I < int(in.n_elem); ++I) out[I] = in(I);
+    QVector<double> out(static_cast<int>(in.n_elem), 0.);
+    for(auto I = 0; I < static_cast<int>(in.n_elem); ++I) out[I] = in(I);
     return out;
 }
 
-arma::uword nextpow2(const arma::uword in) { return arma::uword(std::ceil(log2(double(in)))); }
+arma::uword nextpow2(const arma::uword in) { return static_cast<arma::uword>(std::ceil(log2(static_cast<double>(in)))); }
 
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent), main_page(new Ui::MainWindow), filter_page(this) {
@@ -49,9 +49,7 @@ void MainWindow::on_load_data_clicked() {
 void MainWindow::on_save_clicked() {
     if(time.empty()) return;
 
-    const QString name = QFileDialog::getSaveFileName(this, tr("Save to"), "", tr("All Files (*)"));
-
-    if(!name.isEmpty())
+    if(const QString name = QFileDialog::getSaveFileName(this, tr("Save to"), "", tr("All Files (*)")); !name.isEmpty())
         save_data(name);
 }
 
@@ -136,7 +134,7 @@ void MainWindow::interpolate(arma::vec& result) {
         return;
     }
 
-    CubicSpline interp(source_data.col(0), source_data.col(1), main_page->natural->isChecked());
+    const CubicSpline interp(source_data.col(0), source_data.col(1), main_page->natural->isChecked());
 
     result.set_size(time.n_elem);
 
@@ -187,10 +185,10 @@ void MainWindow::load_data(const QString& name) {
         loaded = true;
         source_data.zeros(single_column.n_elem - 2llu, 2);
         for(auto I = 0llu, J = 2llu; I < source_data.n_rows; ++I, ++J) {
-            source_data(I, 0) = double(I);
+            source_data(I, 0) = static_cast<double>(I);
             source_data(I, 1) = single_column(J);
         }
-        source_data.col(0) *= 1E-3 * double(single_column(0));
+        source_data.col(0) *= 1E-3 * static_cast<double>(single_column(0));
     }
 
     if(!loaded) {
@@ -202,7 +200,7 @@ void MainWindow::load_data(const QString& name) {
     source_data.col(1) /= std::max(std::fabs(source_data.col(1).max()), std::fabs(source_data.col(1).min()));
 }
 
-void MainWindow::save_data(const QString& name) {
+void MainWindow::save_data(const QString& name) const {
     const auto a_fft = perform_transform(acceleration);
     const auto v_fft = perform_transform(velocity);
     const auto u_fft = perform_transform(displacement);
@@ -227,8 +225,7 @@ void MainWindow::save_data(const QString& name) {
 void MainWindow::update_data() {
     if(time.empty()) return;
 
-    const auto time_diff = arma::diff(time);
-    if(time_diff.is_empty()) return;
+    if(const auto time_diff = arma::diff(time); time_diff.is_empty()) return;
 
     const auto step_size = arma::diff(time).min();
     if(step_size == 0.) return;
@@ -360,7 +357,7 @@ void MainWindow::update_data() {
     on_frequency_clicked(main_page->frequency->checkState());
 }
 
-void MainWindow::set_label() {
+void MainWindow::set_label() const {
     main_page->pa->setRange(0, 1);
     main_page->pb->setRange(0, 1);
     main_page->pc->setRange(0, 1);
@@ -447,7 +444,7 @@ void MainWindow::set_label() {
     }
 }
 
-void MainWindow::replot() {
+void MainWindow::replot() const {
     main_page->source_canvas->setBackground(background_color);
     main_page->target_canvas->setBackground(background_color);
     main_page->source_canvas->replot();
@@ -487,23 +484,23 @@ void MainWindow::on_frequency_clicked(const bool checked) {
     replot();
 }
 
-arma::mat MainWindow::perform_transform(const arma::vec& data) {
+arma::mat MainWindow::perform_transform(const arma::vec& data) const {
     const auto length = std::max(1024, 2 << nextpow2(time.n_elem));
     const arma::vec time_diff = arma::diff(time);
     if(time_diff.empty()) return {};
     const auto step_size = time_diff.min();
     if(step_size == 0.) return {};
 
-    const arma::vec fft_frequency = arma::regspace(0, 1, length - 1) / (step_size * double(length));
-    arma::cx_vec fft_cx_magnitude = arma::fft(data, arma::uword(length));
-    arma::vec fft_magnitude = 2. * arma::abs(fft_cx_magnitude) / double(data.n_elem);
+    const arma::vec fft_frequency = arma::regspace(0, 1, length - 1) / (step_size * static_cast<double>(length));
+    const arma::cx_vec fft_cx_magnitude = arma::fft(data, static_cast<arma::uword>(length));
+    arma::vec fft_magnitude = 2. * arma::abs(fft_cx_magnitude) / static_cast<double>(data.n_elem);
 
-    const auto half_length = arma::uword(length) / 2;
+    const auto half_length = static_cast<arma::uword>(length) / 2;
 
     return arma::join_rows(fft_frequency.head(half_length), fft_magnitude.head(half_length));
 }
 
-void MainWindow::plot_time_curve(QCustomPlot* canvas, const arma::mat& data, const char* y_label) {
+void MainWindow::plot_time_curve(QCustomPlot* canvas, const arma::mat& data, const char* y_label) const {
     if(data.empty()) return;
 
     initialise_canvas(canvas, "Time", y_label);
@@ -511,7 +508,7 @@ void MainWindow::plot_time_curve(QCustomPlot* canvas, const arma::mat& data, con
     plot_curve(canvas, data.col(0), data.col(1));
 }
 
-void MainWindow::plot_frequency_curve(QCustomPlot* canvas, const arma::mat& data, const char* y_label) {
+void MainWindow::plot_frequency_curve(QCustomPlot* canvas, const arma::mat& data, const char* y_label) const {
     if(data.empty()) return;
 
     initialise_canvas(canvas, "Frequency", y_label);
@@ -532,7 +529,7 @@ void MainWindow::initialise_canvas(QCustomPlot* canvas, const char* x_label, con
     canvas->yAxis->grid()->setSubGridVisible(true);
 }
 
-void MainWindow::plot_curve(QCustomPlot* canvas, const arma::vec& x_data, const arma::vec& y_data) {
+void MainWindow::plot_curve(QCustomPlot* canvas, const arma::vec& x_data, const arma::vec& y_data) const {
     const auto x_min = x_data.min();
     const auto x_max = x_data.max();
     const auto y_max = y_data.max();
@@ -557,7 +554,7 @@ void MainWindow::plot_curve(QCustomPlot* canvas, const arma::vec& x_data, const 
     canvas->xAxis->scaleRange(1.02, canvas->xAxis->range().center());
     if(main_page->logarithmic->isChecked() && canvas == main_page->target_canvas) {
         canvas->yAxis->setScaleType(QCPAxis::stLogarithmic);
-        QSharedPointer<QCPAxisTickerLog> log_ticker(new QCPAxisTickerLog);
+        const QSharedPointer<QCPAxisTickerLog> log_ticker(new QCPAxisTickerLog);
         log_ticker->setTickCount(10);
         canvas->yAxis->setTicker(log_ticker);
         canvas->yAxis->setNumberFormat("eb");
@@ -566,7 +563,7 @@ void MainWindow::plot_curve(QCustomPlot* canvas, const arma::vec& x_data, const 
     }
     else {
         canvas->yAxis->setScaleType(QCPAxis::stLinear);
-        QSharedPointer<QCPAxisTickerFixed> linear_ticker(new QCPAxisTickerFixed);
+        const QSharedPointer<QCPAxisTickerFixed> linear_ticker(new QCPAxisTickerFixed);
         linear_ticker->setTickStep(std::ceil((y_max - y_min) * 2.) * .05);
         canvas->yAxis->setTicker(linear_ticker);
         canvas->yAxis->setTicks(true);
@@ -583,7 +580,7 @@ void MainWindow::plot_curve(QCustomPlot* canvas, const arma::vec& x_data, const 
 void MainWindow::on_light_clicked(const bool checked) {
     if(checked) {
         QFile file(":/utilities/stylesheet_francesco.qss");
-        file.open(QFile::ReadOnly);
+        [[maybe_unused]] const auto flag = file.open(QFile::ReadOnly);
         setStyleSheet(QString::fromLatin1(file.readAll()));
 
         background_color = QColor(131, 134, 137);
@@ -597,7 +594,7 @@ void MainWindow::on_light_clicked(const bool checked) {
     replot();
 }
 
-void MainWindow::on_listen_clicked() {
+void MainWindow::on_listen_clicked() const {
     if(time.empty()) return;
 
     QAudioFormat audio_format;
@@ -615,7 +612,7 @@ void MainWindow::on_listen_clicked() {
 
     f_data /= std::max(std::fabs(f_data.min()), std::fabs(f_data.max()));
 
-    QByteArray byte_buffer((char*)f_data.memptr(), sizeof(float) * acceleration.n_elem);
+    const QByteArray byte_buffer(reinterpret_cast<char*>(f_data.memptr()), sizeof(float) * acceleration.n_elem);
 
     QMediaPlayer player;
     QAudioOutput audio_output;

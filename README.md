@@ -1,6 +1,6 @@
 # <img src="res/aci.svg" width="100" align="middle"/> [Al]gorithmic [Con]sistency Inte[grator]
 
-[![Release](https://github.com/TLCFEM/alcongrator/actions/workflows/dev.yml/badge.svg)](https://github.com/TLCFEM/alcongrator/actions/workflows/dev.yml)
+[![Release](https://github.com/TLCFEM/alcongrator/actions/workflows/linux.yml/badge.svg)](https://github.com/TLCFEM/alcongrator/actions/workflows/linux.yml)
 [![Build status](https://ci.appveyor.com/api/projects/status/f82nu58w4ovahb75?svg=true)](https://ci.appveyor.com/project/TLCFEM/alcongrator)
 
 **Alcongrator** is a utility to generate ground motion history based on given records.

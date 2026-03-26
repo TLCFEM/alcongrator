@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.22)
 
 project(alcongrator)
 
-set(QT_PATH "$ENV{HOME}/Qt/6.9.0/gcc_64/lib/cmake" CACHE STRING "Path to Qt")
+set(QT_PATH "$ENV{HOME}/Qt/6.10.1/gcc_64/lib/cmake" CACHE STRING "Path to Qt")
 set(CMAKE_PREFIX_PATH "${QT_PATH}")
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
